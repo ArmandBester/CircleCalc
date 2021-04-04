@@ -41,8 +41,8 @@ app.layout = html.Div(children=[
         html.Br(),
         #Scale
         dcc.Input(
-                id="scaleUp", type="number", 
-                min=0, step=1, value=0),
+                id="scaleUp", type="text", 
+                value="0"),
                 ]),        
         
         ]),
@@ -97,7 +97,13 @@ def callback_result(r_value, l_value, toScale):
 
     ratio = segment/A
     per = np.round(ratio * 100, 2)
-    atScale = np.round(ratio**-1 * toScale)
+    try:
+        toScale = float(toScale)
+        if toScale < 0:
+            toScale = 0
+    except ValueError:
+        toScale = 0
+    atScale = np.round(ratio**-1 * toScale, 2)
 
     # Figure layout
     my_layout = go.Layout({"showlegend": False})    
@@ -184,4 +190,4 @@ def callback_result(r_value, l_value, toScale):
 
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug=True)
